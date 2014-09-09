@@ -98,6 +98,7 @@ class PolyvSDK {
 		if($this->_sign){
 			$hash = sha1('cataid='.$cataid.'&JSONRPC='.$JSONRPC.'&writetoken='.$this->_writetoken.$this->_privatekey);
 		}
+		echo 'cataid='.$cataid.'&JSONRPC='.$JSONRPC.'&writetoken='.$this->_writetoken.$this->_privatekey.' hash:'.$hash;
 		if (extension_loaded('curl')) {
 			$ch = curl_init() or die ( curl_error() );
 			$timeout = 360;
