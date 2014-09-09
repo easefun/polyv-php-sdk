@@ -43,3 +43,11 @@ foreach($result as $video){
 $result = $polyvSDK->getById('sl8da4jjbx8d08acd03fa6eee83a9cf0_s');
 echo $result['swf_link'];
 ```
+
+
+```php
+//upload a local video file
+$result = $polyvSDK->uploadfile('title1','desc1','tag1','','/home/a.mp4');
+echo $result['swf_link'];
+```
+
