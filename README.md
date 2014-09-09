@@ -1,6 +1,22 @@
 polyv-php-sdk
 =============
 Usage
+---
+
+config
+--
+before call any function,change demo parameters in polyvSDK.php __construct to your own _readtoken,_writetoken,_privatekey and if sign needed.
+
+
+function __construct() {
+	
+		$this->_readtoken = "nsJ7ZgQMN0-QsVkscukWt-qLfodxoDFm";
+		$this->_writetoken 	= "Y07Q4yopIVXN83n-MPoIlirBKmrMPJu0";	
+		$this->_privatekey = "DFZhoOnkQf";	
+		$this->_sign = true;//提交参数是否需要签名
+}
+	
+
 
 --
 ```php
