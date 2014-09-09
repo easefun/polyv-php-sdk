@@ -9,7 +9,7 @@ class PolyvSDK {
 	
 	function __construct() {
 	
-		$this->_readtoken 		= "nsJ7ZgQMN0-QsVkscukWt-qLfodxoDFm";
+		$this->_readtoken 	= "nsJ7ZgQMN0-QsVkscukWt-qLfodxoDFm";
 		$this->_writetoken 	= "Y07Q4yopIVXN83n-MPoIlirBKmrMPJu0";	
 		$this->_privatekey = "DFZhoOnkQf";	
 		$this->_sign = true;//提交参数是否需要签名
