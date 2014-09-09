@@ -9,7 +9,7 @@ class PolyvSDK {
 	
 	function __construct() {
 	
-		$this->_readtoken 	= "nsJ7ZgQMN0-QsVkscukWt-qLfodxoDFm";
+		$this->_readtoken 		= "nsJ7ZgQMN0-QsVkscukWt-qLfodxoDFm";
 		$this->_writetoken 	= "Y07Q4yopIVXN83n-MPoIlirBKmrMPJu0";	
 		$this->_privatekey = "DFZhoOnkQf";	
 		$this->_sign = true;//提交参数是否需要签名
@@ -89,6 +89,61 @@ class PolyvSDK {
 		else {
 			return null;
 		}
+		
+	}
+	
+	public function uploadfile($title,$desc,$tag,$cataid,$filename) {
+		$JSONRPC = '{"title":"'.$title.'","tag":"'.$tag.'","desc":"'.$desc.'"}';
+				
+		if($this->_sign){
+			$hash = sha1('cataid='.$cataid.'&JSONRPC='.$JSONRPC.'&writetoken='.$this->_writetoken.$this->_privatekey);
+		}
+		if (extension_loaded('curl')) {
+			$ch = curl_init() or die ( curl_error() );
+			$timeout = 360;
+			
+			$post = array(
+				'JSONRPC' => $JSONRPC,
+				'cataid'=>$cataid,
+				'writetoken'=>$this->_writetoken,
+				'sign'=>$hash,
+				'format'=>'xml',
+				'Filedata'=>'@'.$filename
+			);
+			
+			curl_setopt( $ch, CURLOPT_URL, "http://v.polyv.net/uc/services/rest?method=uploadfile" );
+			curl_setopt( $ch, CURLOPT_CONNECTTIMEOUT, $timeout);
+			curl_setopt( $ch, CURLOPT_POSTFIELDS, $post);
+			curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+			
+			
+			$data = curl_exec( $ch );
+			curl_close( $ch );
+			
+
+			if($data){
+				$xml = (new SimpleXMLElement($data));
+				if($xml) {
+					if($xml->error=='0') 
+							return $this->makeVideo($xml->data->video);
+					else 
+						return array(
+							'returncode' => $xml->error
+							);
+				}
+				else {
+					return null;
+				}
+				
+			}
+			else{
+				return false;
+			}
+		}
+		
+			
+			
+		
 		
 	}
 	
