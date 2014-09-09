@@ -5,8 +5,10 @@ Usage
 
 config
 --
-before call any function,change demo parameters in polyvSDK.php __construct to your own _readtoken,_writetoken,_privatekey and if sign needed.
+before call any function
 
+change demo parameters in polyvSDK.php __construct to your own `_readtoken`,`_writetoken`,`_privatekey` and if `_sign` needed.
+```php
 
 function __construct() {
 	
@@ -16,6 +18,8 @@ function __construct() {
 		$this->_sign = true;//提交参数是否需要签名
 }
 	
+```php
+
 
 
 --
