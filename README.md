@@ -11,7 +11,7 @@ require_once('polyvSDK.php');
 
 
 $polyvSDK = new PolyvSDK();
-//load newlist video list
+//load newest video list
 $result = $polyvSDK->getNewList(1,10,"");
 foreach($result as $video){
 	echo $video['swf_link']."<br>";
