@@ -1,7 +1,6 @@
-polyv-php-sdk
+polyv-php-sdk Usage
 =============
-Usage
----
+
 
 config
 --
