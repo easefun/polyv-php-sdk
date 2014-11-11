@@ -4,7 +4,7 @@ class PolyvSDK {
 		
 	private $_readtoken;				
 	private $_writetoken;
-	private $_privateKey;
+	private $_privatekey;
 	private $_sign;
 	
 	function __construct() {
