@@ -55,26 +55,26 @@ class PolyvSDK {
 	}
 	private function makeVideo($video){
 		return array(
-					'vid' => $video->vid, 
-					'hlsIndex' => $video->hlsIndex, 
-					'swf_link' => $video->swf_link, 
-					'ptime' => $video->ptime, 
-					'status' => $video->status, 
-					'df' => $video->df, 
-					'first_image' => $video->first_image, 
-					'title' => $video->title, 
-					'desc' => $video->context, 
-					'duration' => $video->duration, 
-					'flv1' => $video->flv1, 
-					'flv2' => $video->flv2, 
-					'flv3' => $video->flv3, 
-					'mp4_1' => $video->mp4_1,
-					'mp4_2' => $video->mp4_2,
-					'mp4_3' => $video->mp4_3,					
-					'hls_1' => $video->hls_1,
-					'hls_2' => $video->hls_2,
-					'hls_3' => $video->hls_3,
-					'seed' => $video->seed
+					'vid' => (string)$video->vid, 
+					'hlsIndex' => (string)$video->hlsIndex, 
+					'swf_link' => (string)$video->swf_link, 
+					'ptime' => (string)$video->ptime, 
+					'status' => (int) $video->status, 
+					'df' => (int) $video->df, 
+					'first_image' => (string)$video->first_image, 
+					'title' => (string)$video->title, 
+					'desc' => (string)$video->context, 
+					'duration' => (string)$video->duration, 
+					'flv1' => (string)$video->flv1, 
+					'flv2' => (string)$video->flv2, 
+					'flv3' => (string)$video->flv3, 
+					'mp4_1' => (string)$video->mp4_1,
+					'mp4_2' => (string)$video->mp4_2,
+					'mp4_3' => (string)$video->mp4_3,					
+					'hls_1' => (string)$video->hls_1,
+					'hls_2' => (string)$video->hls_2,
+					'hls_3' => (string)$video->hls_3,
+					'seed' => (string)$video->seed
 					);
 	}
 			
