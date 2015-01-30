@@ -14,7 +14,12 @@ class PolyvSDK {
 		$this->_privatekey = "DFZhoOnkQf";	
 		$this->_sign = true;//提交参数是否需要签名
 	}
-	
+	private function sanitize_for_xml($input) {
+		
+	  $output = preg_replace('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', '', $input);
+	  
+	  return $output;
+	}
 	private function _processXmlResponse($url, $xml = ''){
 
 		if (extension_loaded('curl')) {
@@ -37,10 +42,11 @@ class PolyvSDK {
 			$data = curl_exec( $ch );
 			curl_close( $ch );
 
-			if($data)
-				return (new SimpleXMLElement($data));
-			else
+			if($data){
+				return (new SimpleXMLElement($this->sanitize_for_xml($data)));
+			}else{
 				return false;
+			}
 		}
 		if(!empty($xml))
 			throw new Exception('Set xml, but curl does not installed.');
@@ -73,9 +79,12 @@ class PolyvSDK {
 	}
 			
 	public function getById($vid) {
+		
+	    $xml = "";
 		if($this->_sign){
 			$hash = sha1('readtoken='.$this->_readtoken.'&vid='.$vid.$this->_privatekey);
 		}
+		//echo "-->".'http://beta.polyv.net/uc/services/rest?readtoken='.$this->_readtoken.'&method=getById&vid='.$vid.'&format=xml&sign='.$hash;
 		$xml = $this->_processXmlResponse('http://v.polyv.net/uc/services/rest?readtoken='.$this->_readtoken.'&method=getById&vid='.$vid.'&format=xml&sign='.$hash, $xml);
 		if($xml) {
 			if($xml->error=='0') 
@@ -85,6 +94,37 @@ class PolyvSDK {
 				return array(
 					'returncode' => $xml->error
 					);
+		}
+		else {
+			return null;
+		}
+		
+	}
+	
+					
+	/**
+	 * 通过视频标题获取信息
+	 */
+	public function searchByTitle($keyword,$pageNum,$numPerPage) {
+		if($this->_sign){
+			$hash = sha1('keyword='.$keyword.'&numPerPage='.$numPerPage.'&pageNum='.$pageNum.'&readtoken='.$this->_readtoken.$this->_privatekey);
+		}
+		//echo 'http://v.polyv.net/uc/services/rest?readtoken='.$this->_readtoken.'&method=searchByTitle&keyword='.$keyword.'&pageNum='.$pageNum.'&numPerPage='.$numPerPage.'&format=xml&sign='.$hash;
+		$xml = $this->_processXmlResponse('http://v.polyv.net/uc/services/rest?readtoken='.$this->_readtoken.'&method=searchByTitle&keyword='.$keyword.'&pageNum='.$pageNum.'&numPerPage='.$numPerPage.'&format=xml&sign='.$hash, $xml);
+		if($xml) {
+			if($xml->error=='0') {
+				foreach ($xml->data->video as $video){ 
+					
+					$videodata = $this->makeVideo($video);
+					$result[$num] =$videodata;
+					$num++;
+				}
+				return $result;
+			}else{
+				return array(
+					'returncode' => $xml->error
+					);
+			}
 		}
 		else {
 			return null;
@@ -147,14 +187,45 @@ class PolyvSDK {
 		
 		
 	}
-	
+	public function getCata($cataid) {
+		$xml = ''; 
+		$num = 0;
+		if($this->_sign){
+			$hash = sha1('cataid='.$cataid.'&readtoken='.$this->_readtoken.$this->_privatekey);
+		}
+		$xml = $this->_processXmlResponse('http://v.polyv.net/uc/services/rest?readtoken='.$this->_readtoken.'&format=xml&method=getCata&sign='.$hash, $xml);
+		if($xml) {
+			if($xml->error=='0') {
+				foreach ($xml->data->video as $video){ 
+					$videodata = array(
+					'cataid' => $video->cataid, 
+					'articles' => $video->articles, 
+					'cataname' => $video->cataname
+					);
+					
+					
+					$result[$num] =$videodata;
+					$num++;
+				}
+				return $result;
+			}else{
+				return array(
+					'returncode' => $xml->error
+					);
+			}
+		}
+		else {
+			return null;
+		}
+		
+	}
 	public function getNewList($pageNum,$numPerPage,$catatree) {
 	
-					
+		$xml = ''; 
+		$num = 0;
 		if($this->_sign){
 			$hash = sha1('catatree='.$catatree.'&numPerPage='.$numPerPage.'&pageNum='.$pageNum.'&readtoken='.$this->_readtoken.$this->_privatekey);
 		}
-		//echo 'http://v.polyv.net/uc/services/rest?readtoken='.$this->_readtoken.'&method=getNewList&pageNum='.$pageNum.'&format=xml&numPerPage='.$numPerPage.'&catatree='.$catatree.'&sign='.$hash;
 		$xml = $this->_processXmlResponse('http://v.polyv.net/uc/services/rest?readtoken='.$this->_readtoken.'&method=getNewList&pageNum='.$pageNum.'&format=xml&numPerPage='.$numPerPage.'&catatree='.$catatree.'&sign='.$hash, $xml);
 		if($xml) {
 			if($xml->error=='0') {
